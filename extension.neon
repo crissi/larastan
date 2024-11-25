@@ -273,6 +273,11 @@ services:
             - phpstan.broker.dynamicFunctionReturnTypeExtension
 
     -
+        class: Larastan\Larastan\ReturnTypes\Helpers\LiteralExtension
+        tags:
+            - phpstan.broker.dynamicFunctionReturnTypeExtension
+
+    -
         class: Larastan\Larastan\ReturnTypes\CollectionFilterDynamicReturnTypeExtension
         tags:
             - phpstan.broker.dynamicMethodReturnTypeExtension

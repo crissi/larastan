@@ -172,4 +172,11 @@ function test(?int $value = 0): void
     assertType('bool|string|null', env('foo', null));
     assertType('120|bool|string', env('foo', 120));
     assertType('bool|string', env('foo', ''));
+
+    assertType('true', literal(true));
+    assertType('int<0, 10>', literal(random_int(0,10)));
+    assertType("object{foo: 22, bar: 'bar'}&stdClass", literal(foo: 22, bar: "bar"));
+    assertType("object{foo: int<0, 5>, bar: 'bar'}&stdClass", literal(foo: random_int(0,5), bar: "bar"));
+    assertType("object{}&stdClass", literal(new \stdClass));
+    assertType("object{}&stdClass", literal());
 }
