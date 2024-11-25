@@ -30,30 +30,29 @@ class LiteralExtension implements DynamicFunctionReturnTypeExtension
     ): Type {
         $args = $functionCall->getArgs();
 
-        if (count($args) === 0) {
-            // No arguments provided, return an empty object with `stdClass`
-            return TypeCombinator::intersect(new ObjectShapeType([], []), new ObjectType(stdClass::class));
-        }
-
         // Handle the case of a single argument, returning its type directly
         if (count($args) === 1) {
             $argType = $scope->getType($args[0]->value);
 
-            // Handle special case for `new StdClass`
-            if ($argType->isObject()->yes() && $argType->getClassReflection()?->getName() === stdClass::class) {
-                return TypeCombinator::intersect(new ObjectShapeType([], []), $argType);
-            }
+            $nameOfParam = $args[0]->getAttributes()['originalArg']->name->name ?? null;
 
-            return $argType;
+            if ($nameOfParam === null) {
+
+                if ($argType->isObject()->yes() && $argType->getClassReflection()?->getName() === stdClass::class) {
+                    return TypeCombinator::intersect(new ObjectShapeType([], []), $argType);
+                }
+
+                return $argType;
+            }
         }
 
         $properties = [];
-        foreach ($args as $argExpression) {
+        foreach ($args as $index => $argExpression) {
             $nameOfParam = $argExpression->getAttributes()['originalArg']->name->name ?? null;
 
             if ($nameOfParam === null) {
-                // Handle unnamed arguments or skip
-                continue;
+                // Handle unnamed arguments
+                $nameOfParam = $index;
             }
 
             $properties[$nameOfParam] = $scope->getType($argExpression->value);
