@@ -182,4 +182,5 @@ function test(?int $value = 0): void
     assertType("object{}&stdClass", literal());
     assertType("object{0: 'bar', 1: 'foo'}&stdClass", literal('bar', 'foo'));
     assertType("object{0: 4, bar: 'foo'}&stdClass", literal(4, bar:'foo'));
+    assertType("App\User", literal(new User()));
 }
