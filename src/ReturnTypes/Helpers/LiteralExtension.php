@@ -37,7 +37,6 @@ class LiteralExtension implements DynamicFunctionReturnTypeExtension
             $nameOfParam = $args[0]->getAttributes()['originalArg']->name->name ?? null;
 
             if ($nameOfParam === null) {
-
                 if ($argType->isObject()->yes() && $argType->getClassReflection()?->getName() === stdClass::class) {
                     return TypeCombinator::intersect(new ObjectShapeType([], []), $argType);
                 }
